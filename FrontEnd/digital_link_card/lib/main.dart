@@ -1,5 +1,16 @@
+import 'package:digital_link_card/card_information.dart';
+import 'package:digital_link_card/user_information_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flip_card/flip_card.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'constants.dart';
+import 'theme.dart';
+
+// Pages import
+import 'signup_page.dart';
+import 'user_information_page.dart';
+import 'social_media_page.dart';
+import 'user_card_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,27 +23,63 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        backgroundColor: Constants.lightTeal,
+        scaffoldBackgroundColor: Constants.lightTeal,
+        fontFamily: 'ArchitectsDaughter',
+        elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonThemeDLC.elevatedButtonStyle),
       ),
-      home: MainPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => WelcomePage(),
+        '/signup': (context) => SignupPage(),
+        '/userinfo' : (context) => UserInformationPage(),
+        '/socialmedia' : (context) => SocialMediaPage(),
+        '/main': (context) => UserCardPage(),
+      },
+      // home: WelcomePage(),
     );
   }
 }
 
-class MainPage extends StatelessWidget{
+class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('Welcome to\nDigital Link Card', style: GoogleFonts.raleway(fontSize: 36,), textAlign: TextAlign.center,),
+              Container(
+                // height: 200,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: (){
+                          Navigator.pushNamed(context, '/signup');
+                        },
+                        child: Text('Sign up'),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: (){
+                          Navigator.pushNamed(context, '/main');
+                        },
+                        child: Text('Log in'),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
