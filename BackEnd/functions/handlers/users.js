@@ -127,31 +127,38 @@ exports.addlinks = (req, res) => {
   } else return res.status(400).json({ result: "doc not found" });
 };
 
-//add cards
-exports.addcards = (req, res) => {
-  const card = {
-    userId: "",
-  };
+//get user information
+exports.getUser = (req, res) => {
+  let userEmail = req.query.email;
 
-  db.doc(`/cards${req.body.email}`)
+  db.doc(`/users/${userEmail}`)
     .get()
     .then((doc) => {
       if (doc.exists) {
-        return res.status(403).json({ error: "card already exists" });
-      } else {
-        card.userId = db.collection("/cards").add;
-      }
+        res.status(200).json(doc.data());
+      } else res.status(404).json({ message: "User not found" });
+    })
+    .catch((err) => {
+      res.status(400).json({ error: err });
     });
+};
 
-  let doc = db.collection("users").doc(req.body.email);
-  if (doc) {
-    card.userId = doc.userId;
-  }
-  db.collection("cards").add(card);
-  return res.status(200).json(card);
+//patch title
+exports.addtitle = (req, res) => {
+  let userData = { title: req.body.title, email: req.body.email };
 
-  try {
-  } catch (error) {
-    return res.status(400).json({ error: error });
-  }
+  db.doc(`/users/${userData.email}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        db.collection("users")
+          .doc(userData.email)
+          .update({ title: userData.title });
+
+        return res.status(200).json({ message: "title added successfully" });
+      } else return res.status(404).json({ message: "User not found" });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
 };
