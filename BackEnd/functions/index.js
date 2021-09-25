@@ -4,7 +4,13 @@ const cors = require("cors");
 const { db } = require("./utils/admin");
 app.use(cors());
 
-const { signup, login, addlinks, addcards } = require("./handlers/users");
+const {
+  signup,
+  login,
+  addlinks,
+  getUser,
+  addtitle,
+} = require("./handlers/users");
 
 //users api
 app.get("/users", (req, res) => {
@@ -35,8 +41,8 @@ app.get("/users", (req, res) => {
 app.post("/signup", signup);
 app.post("/login", login);
 app.patch("/addlinks", addlinks);
-
-app.post("/addcards", addcards);
+app.get("/getuser", getUser);
+app.patch("/addtitle", addtitle);
 
 exports.api = functions.https.onRequest(app);
 exports.helloWorld = functions.https.onRequest((request, response) => {
