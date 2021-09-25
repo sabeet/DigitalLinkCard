@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'card_information.dart';
 import 'constants.dart';
 
@@ -12,12 +13,15 @@ class CardModelFront extends StatelessWidget{
     type 2: x
     type 3: y
    */
+
   final int type;
   final CardInformation cardInfo;
   CardModelFront({
     required this.type,
     required this.cardInfo,
   });
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +61,15 @@ class CardModelFront extends StatelessWidget{
 
 class CardModelBack extends StatelessWidget {
   final int type;
+  final SocialMediaLinks socMedLinks;
+  // final String socMedLinks;
   CardModelBack({
     required this.type,
+    required this.socMedLinks,
   });
+
+  List<String> socMedKey = [];
+  List<String> socMedValue = [];
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +87,26 @@ class CardModelBack extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //     top: 10,
-          //     left: 20,
-          //     child: SocialMedia()
-          // ),
+          ...List.generate(
+            socMedLinks.socMedKey.length,
+              (index) => Positioned(
+                top: 30.0 * index + 10,
+                left: 20,
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SocialMediaIcon.getIcon(socMedLinks.socMedKey[index]),
+                      SizedBox(width: 4,),
+                      Text('${socMedLinks.socMedKey[index]}: ', style: Constants.bodyBigWhiteTextStyle,),
+                      Text(socMedLinks.socMedValue[index], style: Constants.bodyBigWhiteTextStyle,)
+                    ],
+                  ),
+                ),
 
+                // Text(socMedLinks.socMedKey[index], style: Constants.bodyBigWhiteTextStyle),
+              )
+          ),
         ]
     );
   }

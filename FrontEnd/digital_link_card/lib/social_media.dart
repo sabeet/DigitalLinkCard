@@ -4,28 +4,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'constants.dart';
 
-class SocialMedia extends StatelessWidget {
-  final String socmed;
-  final String socmedTag;
+class SocialMediaLinks {
+  final List<String> socMedKey;
+  final List<String> socMedValue;
 
-  SocialMedia({
-    required this.socmed,
-    required this.socmedTag,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          // FaIcon(FontAwesomeIcons.discord, color: Colors.blue,),
-          SocialMediaIcon.getIcon(socmed),
-          SizedBox(width: 10,),
-          Text(socmedTag, style: Constants.bodySmallWhiteTextStyle),
-        ],
-      ),
-    );
-  }
+  SocialMediaLinks(
+    this.socMedKey,
+    this.socMedValue
+  );
 }
 
 class SocialMediaIcon {

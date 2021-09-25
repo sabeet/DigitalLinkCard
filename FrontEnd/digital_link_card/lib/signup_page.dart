@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 
 class SignupPage extends StatelessWidget{
-  final String loginLink = 'https://us-central1-digitallinkcard-687db.cloudfunctions.net/api/login';
+
   final String signupLink = 'https://us-central1-digitallinkcard-687db.cloudfunctions.net/api/signup';
 
   final firstnameController = TextEditingController();
@@ -115,7 +115,7 @@ class SignupPage extends StatelessWidget{
                   height: 40,
                   child: ElevatedButton(
                     onPressed: (){
-                      // signupUser();
+                      signupUser();
                       saveUserCredentials();
                       Navigator.pushNamed(context, '/userinfo');
                     },

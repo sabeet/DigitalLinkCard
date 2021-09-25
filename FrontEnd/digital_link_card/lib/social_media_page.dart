@@ -86,7 +86,6 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                   itemCount: socMedKey.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      // width: 100,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -158,7 +157,12 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                   onPressed: (){
                     patchUserLinks();
                     saveUserSocMed();
-                    Navigator.pushNamed(context, '/main');
+
+                    SocialMediaLinks socMedLinks = SocialMediaLinks(socMedKey, socMedValue);
+                    // SocialMediaLinks socMedLinks = SocialMediaLinks('asadasdafas');
+                    print(socMedLinks.socMedKey);
+
+                    Navigator.pushNamed(context, '/main', arguments: socMedLinks);
                   },
                   child: Text('Finish'),
                 ),

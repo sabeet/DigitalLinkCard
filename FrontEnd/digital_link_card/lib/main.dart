@@ -8,9 +8,11 @@ import 'theme.dart';
 
 // Pages import
 import 'signup_page.dart';
+import 'login_page.dart';
 import 'user_information_page.dart';
 import 'social_media_page.dart';
 import 'user_card_page.dart';
+import 'other_card_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,11 +34,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => WelcomePage(),
         '/signup': (context) => SignupPage(),
+        '/login' : (context) => LoginPage(),
         '/userinfo' : (context) => UserInformationPage(),
         '/socialmedia' : (context) => SocialMediaPage(),
         '/main': (context) => UserCardPage(),
+        '/other' : (context) => OtherCardPage(),
       },
-      // home: WelcomePage(),
     );
   }
 }
@@ -68,7 +71,7 @@ class WelcomePage extends StatelessWidget {
                       width: 200,
                       child: ElevatedButton(
                         onPressed: (){
-                          Navigator.pushNamed(context, '/main');
+                          Navigator.pushNamed(context, '/login');
                         },
                         child: Text('Log in'),
                       ),

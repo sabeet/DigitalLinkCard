@@ -1,12 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path/path.dart';
+import 'package:file/file.dart';
 
 import 'constants.dart';
 import 'card_information.dart';
 import 'card_model.dart';
-
-
+import 'social_media.dart';
 
 class UserCardPage extends StatefulWidget{
   @override
@@ -14,10 +19,15 @@ class UserCardPage extends StatefulWidget{
 }
 
 class _UserCardPageState extends State<UserCardPage> {
+  late List<String> socMedKey;
+  late List<String> socMedValue;
+
+  Uint8List? _imageFile;
+  ScreenshotController screenshotController = ScreenshotController();
+
   @override
   void initState() {
     super.initState();
-    loadUserInfo();
   }
 
   Future<CardInformation> loadUserInfo() async {
@@ -29,7 +39,12 @@ class _UserCardPageState extends State<UserCardPage> {
       email: (prefs.getString('email') ?? 'empty@email.com'),
       title: (prefs.getString('title') ?? 'Empty Title')
     );
+
     return cardInfo;
+  }
+  _saved(File image) async {
+    final result = await ImageGallerySaver.saveImage(image.readAsBytesSync());
+    print("File Saved to Gallery");
   }
 
   @override
@@ -38,21 +53,32 @@ class _UserCardPageState extends State<UserCardPage> {
       body: SafeArea(
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Your Card', style: Constants.heading1BlackTextStyle),
               FutureBuilder(
                 future: loadUserInfo(),
                 builder: (context, AsyncSnapshot<CardInformation> snapshot) {
                   if(snapshot.hasData){
-                    return DigitalCard(cardInfo: snapshot.data!,);
+                    return DigitalCard(cardInfo: snapshot.data!);
                   }
                   else {
                     return SizedBox();
                   }
 
-                },),
-              // DigitalCard(cardInfo: cardInfo,),
+                },
+              ),
+              Text('(Tap to flip)', style: Constants.bodyBigBlackTextStyle,),
+              SizedBox(height: 40,),
+              Container(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/other');
+                  },
+                  child: Text('See Other Card'),
+                ),
+              )
             ],
           ),
         ),
@@ -66,6 +92,7 @@ class DigitalCard extends StatelessWidget {
 
   DigitalCard({
     required this.cardInfo,
+
   });
 
   @override
@@ -92,9 +119,11 @@ class FrontCard extends StatelessWidget{
 }
 
 class BackCard extends StatelessWidget{
+  // final socMedLinks;
   @override
   Widget build(BuildContext context) {
-    return CardModelBack(type: 1,);
+    final SocialMediaLinks socMedLinks = ModalRoute.of(context)!.settings.arguments as SocialMediaLinks;
+    return CardModelBack(type: 1, socMedLinks: socMedLinks);
 
   }
 }
