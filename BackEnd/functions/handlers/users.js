@@ -1,6 +1,11 @@
 const { db, admin } = require("../utils/admin");
 const firebase = require("firebase");
+const functions = require("firebase-functions");
 const { firebaseConfig } = require("../utils/config");
+
+const twilio = require("twilio");
+const accounSid = "AC30668d739d5127e3d11129ae7b73b51e";
+const authToken = "44e83efe1f52a7164aa256009b149c18";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -9,6 +14,8 @@ const {
   validateLoginData,
   reduceUserDetails,
 } = require("../utils/validators");
+
+var provider = new firebase.auth.GoogleAuthProvider();
 
 //signup api
 exports.signup = (req, res) => {
@@ -45,11 +52,12 @@ exports.signup = (req, res) => {
     .then((data) => {
       data.user.sendEmailVerification();
       userId = data.user.uid;
-      console.log(data);
+      //console.log(data);
       return data.user.getIdToken();
     })
     .then((idtoken) => {
       token = idtoken;
+      console.log(token);
       const userCredentials = {
         email: newUser.email,
         firstName: req.body.firstName,
@@ -61,17 +69,27 @@ exports.signup = (req, res) => {
         userId,
       };
       let dbEntry = db.doc(`/users/${newUser.email}`).set(userCredentials);
-      return dbEntry;
+      const client = new twilio(accounSid, authToken);
+      const twilioPhone = "+18564524204";
+
+      return client.messages
+        .create({
+          body: "Check your email to confirm account registration with Digital Link Card!",
+          from: twilioPhone,
+          to: "+13478752392",
+        })
+        .then((message) => {
+          console.log(message);
+        });
     })
     .then(() => {
       return res.status(201).json({ token });
     })
     .catch((err) => {
-      console.error(err);
       if (err.code === "auth/email-already-in-use") {
         return res.status(400).json({ email: "Email already in use" });
       } else {
-        return res.status(500).json({ error: err.code });
+        return res.status(500).json({ error: err });
       }
     });
 };
@@ -105,7 +123,6 @@ exports.login = (req, res) => {
       } else return res.status(400).json({ message: "Email not verified!" });
     })
     .catch((err) => {
-      console.log(err);
       if (err.code === "auth/wrong-password") {
         return res
           .status(403)
@@ -119,7 +136,6 @@ exports.addlinks = (req, res) => {
   let doc = db.collection("users").doc(req.body.email);
 
   if (doc) {
-    console.log("found the doc");
     doc.update({
       links: req.body.links,
     });
