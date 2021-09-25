@@ -40,8 +40,9 @@ app.get("/users", (req, res) => {
 
 app.post("/signup", signup);
 app.post("/login", login);
-app.patch("/addlinks", addlinks);
 app.get("/getuser", getUser);
+
+app.patch("/addlinks", addlinks);
 app.patch("/addtitle", addtitle);
 
 exports.api = functions.https.onRequest(app);
