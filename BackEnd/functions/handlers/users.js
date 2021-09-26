@@ -4,8 +4,9 @@ const functions = require("firebase-functions");
 const { firebaseConfig } = require("../utils/config");
 
 const twilio = require("twilio");
-const accounSid = "AC30668d739d5127e3d11129ae7b73b51e";
-const authToken = "44e83efe1f52a7164aa256009b149c18";
+
+const accounSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH;
 
 firebase.initializeApp(firebaseConfig);
 
@@ -57,7 +58,7 @@ exports.signup = (req, res) => {
     })
     .then((idtoken) => {
       token = idtoken;
-      console.log(token);
+
       const userCredentials = {
         email: newUser.email,
         firstName: req.body.firstName,
@@ -76,7 +77,7 @@ exports.signup = (req, res) => {
         .create({
           body: "Check your email to confirm account registration with Digital Link Card!",
           from: twilioPhone,
-          to: "+13478752392",
+          to: "+17174303482",
         })
         .then((message) => {
           console.log(message);
