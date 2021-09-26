@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const app = require("express")();
 const cors = require("cors");
+require("dotenv").config();
 const { db } = require("./utils/admin");
 app.use(cors());
 
