@@ -1,4 +1,4 @@
-<h1> Digital Business Card </h1>
+<h1> Digital Link Card </h1>
 
 <hr />
 Business card on the front side
